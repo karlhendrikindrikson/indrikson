@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title></title>
+  </head>
+  <body></body>
+  <script>
+    const urlSegments = window.location.href.split('/');
+    window.location.href = `/#/${urlSegments[urlSegments.length - 1]}`;
+  </script>
+</html>
