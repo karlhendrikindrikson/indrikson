@@ -2,8 +2,545 @@
 <html>
 	<head>
 		<title>Indrikson</title>
+		<style>
+			body {
+				margin: 0;
+				padding: 0;
+				font-family: Baskerville,Baskerville Old Face,Hoefler Text,Garamond,Times New Roman,serif;
+				color: white;
+				text-align: center;
+			}
+			a {
+				color: white;
+			}
+			.page {
+				width: calc(100vw - var(--scrollbarWidth));
+				height: calc(100vh - 20px);
+				background-color: #ccbea2;
+				padding: 20px;
+				padding-bottom: 0;
+				-webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+				-moz-box-sizing: border-box;    /* Firefox, other Gecko */
+				box-sizing: border-box;
+				position: relative;
+			}
+			.page:not(:first-child) {
+				height: 100vh;
+				padding-bottom: 20px;
+			}
+			.page:nth-child(3) {
+				padding-top: 0;
+				height: calc(100vh - 20px);
+			}
+			.page-content {
+				width: 100%;
+				height: 100%;
+				border-radius: 2px;
+				display: flex;
+				flex-direction: column;
+				row-gap: 70px;
+				justify-content: center;
+				align-items: center;
+				position: relative;
+			}
+			.image-credit {
+				position: absolute;
+				right: 10px;
+				bottom: 0;
+				text-align: right;
+				opacity: 0.7;
+			}
+			.landing {
+				background-image: url('./background_landing.jpg');
+				background-size: cover;
+ 				background-repeat: no-repeat;
+			}
+			.registration {
+				background-image: url('./background_registration.jpg');
+				background-size: cover;
+ 				background-repeat: no-repeat;
+			}
+			.summary {
+				background-image: url('./background_summary.jpg');
+				background-size: cover;
+ 				background-repeat: no-repeat;
+			}
+			#landing-title {
+				margin-bottom: 30px;
+			}
+			.title {
+				font-size: 70px;
+			}
+			.subtitle {
+				font-size: 50px;
+			}
+			.pop-in {
+				opacity: 0;
+				transition: opacity 1s ease;
+			}
+			.text-box {
+				padding: 10px 25px;
+				background-color: #ccbea2;
+				box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+				text-shadow: 1px 1px 2px rgba(0,0,0, 0.15);
+			}
+			.arrow {
+				position: absolute;
+				left: calc(50% - 30px);
+				bottom: 30px;
+				width: 60px;
+				height: 60px;
+				cursor: pointer;
+			}
+			.arrow svg {
+				fill: #fff4ee;
+			}
+			.floating { 
+				animation-name: floating;
+				animation-duration: 3s;
+				animation-iteration-count: infinite;
+				animation-timing-function: ease-in-out;
+				margin-top: 5px;
+			}
+			@keyframes floating {
+				0% { transform: translate(0,  0px); }
+				50%  { transform: translate(0, 15px); }
+				100%   { transform: translate(0, -0px); }   
+			}
+			#guests {
+				display: grid;
+				grid-template-columns: repeat(1, auto);
+				column-gap: 50px;
+				row-gap: 10px;
+			}
+			.guest {
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				font-size: 32px;
+			}
+			.guest form {
+				display: flex;
+			}
+			.guest .guest-name {
+				margin-right: 40px;
+			}
+			#registration-form {
+				position: relative;
+			}
+			input[type=radio] {
+				accent-color: black;
+				margin-right: 5px;
+			}
+			button {
+				white-space: nowrap;
+				padding: 2px 20px;
+				font-size: 20px;
+				margin-left: auto;
+				margin-right: auto;
+				align-items: center;
+				background-color: #8b7e63;
+				color: white;
+				border: 3px solid transparent;
+				-webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+				-moz-box-sizing: border-box;    /* Firefox, other Gecko */
+				box-sizing: border-box;
+				display: inline-flex;
+				fill: black;
+				padding: 0 17px;
+				justify-content: center;
+				letter-spacing: -.8px;
+				text-align: center;
+				transition: all .3s;
+				cursor: pointer;
+			}
+			button:not(:disabled):hover {
+				background-color: #ae9e7c;
+			}
+			.send-icon {
+				width: 20px;
+				height: 20px;
+				margin-right: 10px;
+				fill: black;
+			}
+			#register-button {
+				border-radius: 8px;
+				position: absolute;
+				bottom: -20px;
+				left: 50%;
+				transform: translate(-50%, 100%);
+				width: fit-content;
+				height: 38px;
+				min-width: 120px;
+			}
+			button:disabled {
+				cursor: default;
+				opacity: 0.7;
+			}
+			.register-message {
+				position: absolute;
+				left: 50%;
+				bottom: -80px;
+				transform: translate(-50%, 100%);
+				font-size: 20px;
+				white-space: nowrap;
+				text-align: center;
+			}
+			#email-input-form {
+				min-height: 38px;
+				position: relative;
+			}
+			#email-input {
+				border-radius: 4px;
+				width: 500px;
+				height: 38px;
+				font-size: 16px;
+				-webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+				-moz-box-sizing: border-box;    /* Firefox, other Gecko */
+				box-sizing: border-box;
+				background-color: white;
+				vertical-align: bottom;
+				margin-right: 10px;
+				--webkit-appearance: none;
+				outline: none;
+				padding: 2px 10px;
+			}
+			#register-email-button {
+				vertical-align: bottom;
+				border-radius: 4px;
+				height: 38px;
+			}
+			#register-email-button .send-icon {
+				width: 20px;
+				height: 20px;
+			}
+			.register-email-message {
+				position: absolute;
+				left: 50%;
+				bottom: -40px;
+				transform: translate(-50%, 100%);
+				font-size: 20px;
+				white-space: nowrap;
+				text-align: center;
+			}
+			.btn {
+				border: 3px solid #80793c;
+				display: inline-block;
+				padding: 5px 10px;
+				position: relative;
+				text-align: center;
+				transition: background 600ms ease, color 600ms ease;
+			}
+
+			input[type=radio].toggle {
+				display: none;
+			}
+			input[type=radio].toggle + label {
+				cursor: pointer;
+				min-width: 60px;
+				font-size: 25px;
+			}
+			input[type=radio].toggle + label:hover {
+				background: none;
+				color: #80793c;
+			}
+			input[type=radio].toggle + label:after {
+				background: #80793c;
+				content: "";
+				height: 100%;
+				position: absolute;
+				top: 0;
+				transition: left 200ms cubic-bezier(0.77, 0, 0.175, 1);
+				width: 100%;
+				z-index: -1;
+			}
+			input[type=radio].toggle.toggle-left + label {
+				border-right: 0;
+				border-radius: 4px 0 0 4px;
+			}
+			input[type=radio].toggle.toggle-left + label:after {
+				left: 100%;
+			}
+			input[type=radio].toggle.toggle-right + label {
+				margin-left: -5px;
+				border-radius: 0 4px 4px 0;
+			}
+			input[type=radio].toggle.toggle-right + label:after {
+				left: -100%;
+			}
+			input[type=radio].toggle:checked + label {
+				cursor: default;
+				color: #fff;
+				transition: color 200ms;
+				z-index: 2;
+			}
+			input[type=radio].toggle:checked + label:after {
+				left: 0;
+			}
+
+			@media only screen and (max-width: 768px) {
+				.title {
+					font-size: 30px;
+					margin-bottom: 0 !important;
+				}
+				.subtitle {
+					font-size: 25px;
+				}
+				.page {
+					height: fit-content;
+				}
+				.page-content {
+					min-height: calc(100vh - 40px);
+					padding: 20px;
+					-webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+					-moz-box-sizing: border-box;    /* Firefox, other Gecko */
+					box-sizing: border-box;
+					row-gap: 30px;
+				}
+				.text-box {
+					max-width: 80%;
+				}
+				#registration-form {
+					margin-bottom: 100px;
+				}
+				#guests {
+					grid-template-columns: repeat(1, auto);
+					column-gap: 0;
+				}
+				.guest {
+					font-size: 25px;
+				}
+				.register-message {
+					font-size: 18px;
+				}
+				#register-success-message {
+					min-width: fit-content;
+				}
+				#register-error-message {
+					white-space: normal;
+					width: 80%;
+				}
+				.browser-break {
+					display: none;
+				}
+				#arrow-1 {
+					bottom: 5px;
+					width: 40px;
+					height: 40px;
+					animation: none;
+				}
+				#arrow-2 {
+					bottom: 20px;
+					width: 40px;
+					height: 40px;
+					animation: none;
+				}
+				.guest-name {
+					margin-right: 10px !important;
+				}
+				#registration-form {
+					padding-left: 15px;
+				}
+				.btn {
+					font-size: 20px !important;
+				}
+				#email-input {
+					margin-top: 20px;
+					margin-bottom: 10px;
+					width: 100%;
+				}
+			}
+		</style>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
 	</head>
 	<body>
-		Hello world!
+		<div class="page">
+			<div class="page-content landing">
+				<div class="title pop-in text-box" id="landing-title"></div>
+				<div class="subtitle pop-in text-box" id="landing-subtitle-1">
+					On aeg tähistada ühekordse riigilõivu tasumist,<br class="browser-break">
+					millega lõpetame oma vabaabielu.
+				</div>
+				<div class="subtitle pop-in text-box" id="landing-subtitle-2">
+					Kuna see on meie jaoks eriline sündmus, siis soovime seda tähistada.<br class="browser-break">
+					Selleks avaneb võimalus 12. mail kell 18:00 <a href="https://literaat.ee/resto/#oleme-avatud">Literaadi restoranis</a>.
+				</div>
+				<div id="arrow-1" class="arrow pop-in floating" onclick="scrollToPage(2)">
+					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!-- Font Awesome Pro 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) --><path d="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z"/></svg>
+				</div>
+				<div class="image-credit">
+					Image by <a href="https://www.freepik.com/free-photo/top-view-pale-pink-flowers-black-water_5200429.htm#query=floral%20vertical&position=10&from_view=search&track=ais">Freepik</a>
+				</div>
+			</div>
+		</div>
+
+		<div class="page">
+			<div class="page-content registration">
+				<div class="subtitle text-box">
+					Oma osavõtust palume teada anda hiljemalt 20. aprilliks<br class="browser-break">
+					alloleva vormi või teile sobiva kanali kaudu.<br class="browser-break">
+				</div>
+
+				<div id="registration-form" class="text-box">
+					<div id="guests"></div>
+					<button type="button" onclick="register_attendees()" id="register-button">
+						<svg width="20" height="20" class="send-icon">
+							<image xlink:href="send.svg" width="20" height="20"/>
+						</svg>
+						Saada vastus
+					</button>
+					<div id="register-attendees-success-message" class="register-message text-box pop-in">
+						Aitäh! Saime teie vastuse kätte.
+					</div>
+					<div id="register-attendees-error-message" class="register-message text-box pop-in">
+						Midagi läks valesti. Kui see jätkub palume teil teisi kanaleid kasutada.
+					</div>
+				</div>
+
+				<div id="arrow-2" class="arrow floating" onclick="scrollToPage(3)">
+					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!-- Font Awesome Pro 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) --><path d="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z"/></svg>
+				</div>
+
+				<div class="image-credit">
+					Image by <a href="https://www.freepik.com/free-photo/flat-lay-gorgeous-pink-flowers-black-water_5200433.htm#query=floral%20vertical&position=13&from_view=search&track=ais">Freepik</a>
+				</div>
+			</div>
+		</div>
+
+		<div class="page">
+			<div class="page-content summary">
+				<div class="subtitle text-box">
+					Oleme tänulikud kui pulmakink mahub ümbikusse.
+				</div>
+
+				<div class="subtitle text-box">
+					Kui soovid kursis olla täiendava infoga ja saada meie poolseid e-kirju,<br class="browser-break">
+					sisesta palun oma e-posti aadress.
+					<div id="email-input-form">
+						<div>
+							<input placeholder="Sisesta e-posti aadress" id="email-input"/><button type="button" id="register-email-button" onclick="register_email()">
+								<svg width="18" height="18" class="send-icon">
+									<image xlink:href="send.svg" width="18" height="18"/>
+								</svg>
+								Saada
+							</button>
+						</div>
+						<div id="register-email-success-message" class="register-email-message text-box pop-in">
+							Aitäh! E-posti aadress salvestatud.
+						</div>
+						<div id="register-email-error-message" class="register-email-message text-box pop-in">
+							Midagi läks valesti. Kui see jätkub palume teil teisi kanaleid kasutada.
+						</div>
+					</div>
+				</div>
+
+				<div class="image-credit">
+					Image by <a href="https://www.freepik.com/free-photo/top-view-delicate-pink-flowers-black-water_5200439.htm#query=floral%20vertical&position=15&from_view=search&track=ais">Freepik</a>
+				</div>
+			</div>
+		</div>
+		<script>
+			console.log('Häkkerid, progejad ja Artid hoidke dev toolidest eemale! (ノಠ益ಠ)ノ');
+			const scrollbarWidth = window.innerWidth - document.body.clientWidth;
+			document.body.style.setProperty("--scrollbarWidth", `${scrollbarWidth}px`);
+			const baseUrl = "http://varrock:5000";
+			function scrollToPage(page) {
+				$(".page")[page -1].scrollIntoView({
+					behavior: "smooth", // or "auto" or "instant"
+					block: "start" // or "end"
+				});
+			}
+			function getNameParam() {
+				const urlSegments = window.location.href.split('/');
+				return urlSegments[urlSegments.length - 1];
+			}
+			function revealElement(selector, timeout) {
+				setTimeout(() => {
+					$(selector).css('opacity', '1');
+				}, timeout);
+			}
+			function hideElement(selector, timeout) {
+				setTimeout(() => {
+					$(selector).css('opacity', '0');
+				}, timeout);
+			}
+			const nameParam = getNameParam();
+			let data = {};
+			$.get(`${baseUrl}/guests/${nameParam}`, (_data) => {
+				data = _data;
+				$("#landing-title").text(`${data.title}!`);
+				revealElement("#landing-title", 100);
+				revealElement("#landing-subtitle-1", 2000);
+				revealElement("#landing-subtitle-2", 5000);
+				revealElement("#arrow-1", 7000);
+				data.guests.forEach((guest, i) => {
+					$("#guests").append(
+						$(``
+							+ `<div class="guest" id="guest-${i}">`
+							+ `  <div class="guest-name">${guest.name}</div>`
+							+ `  <form style="overflow: hidden;">`
+							+ `    <input type="radio" name="attending" class="toggle toggle-left" id="guest-${i}-attending" value="true" ${guest.attending ? 'checked' : ''}>`
+							+ `    <label class="btn" for="guest-${i}-attending">Tuleb</label>`
+							+ `    <input type="radio" name="attending" class="toggle toggle-right" id="guest-${i}-not-attending" value="false" ${guest.attending ? '' : 'checked'}>`
+							+ `    <label class="btn" for="guest-${i}-not-attending">Ei tule</label>`
+							+ `  </form>`
+							+ `</div>`
+						)
+					);
+				});
+			});
+			function register_attendees() {
+				$("#register-button").prop('disabled', true);
+				const body = {
+					attendees: data.guests.map((attendee, i) => ({
+						...attendee,
+						attending: $(`#guest-${i}-attending`).prop("checked")
+					}))
+				}
+				$.ajax({
+					url: `${baseUrl}/register/${nameParam}`,
+					dataType: 'json',
+					type: 'post',
+					contentType: 'application/json',
+					data: JSON.stringify(body),
+					processData: false,
+					success: () => {
+						$("#register-attendees-success-message").css('opacity', '1');
+						hideElement("#register-attendees-success-message", 5000);
+						$("#register-button").prop('disabled', false);
+					},
+					error: () => {
+						$("#register-attendees-error-message").css('opacity', '1');
+						hideElement("#register-attendees-error-message", 5000);
+						$("#register-button").prop('disabled', false);
+					}
+				});
+			}
+			function register_email() {
+				$("#register-email-button").prop('disabled', true);
+				const body = {
+					email: $("#email-input").text()
+				}
+				$.ajax({
+					url: `${baseUrl}/email/${nameParam}`,
+					dataType: 'json',
+					type: 'post',
+					contentType: 'application/json',
+					data: JSON.stringify(body),
+					processData: false,
+					success: () => {
+						$("#register-email-success-message").css('opacity', '1');
+						hideElement("#register-email-success-message", 5000);
+						$("#register-email-button").prop('disabled', false);
+					},
+					error: () => {
+						$("#register-email-error-message").css('opacity', '1');
+						hideElement("#register-email-error-message", 5000);
+						$("#register-email-button").prop('disabled', false);
+					}
+				})
+			}
+			console.log(nameParam)
+		</script>
 	</body>
 </html>
