@@ -13,6 +13,42 @@
 			a {
 				color: white;
 			}
+			@keyframes spin {
+				from {
+					transform:rotate(0deg);
+				}
+				to {
+					transform:rotate(360deg);
+				}
+			}
+			#overlay {
+				position: fixed;
+				left: 0;
+				top: 0;
+				width: 100vw;
+				height: 100vh;
+				background-color: #ccbea2;
+				opacity: 1;
+				z-index: 10;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				font-size: 70px;
+				transition: opacity 1.5s ease;
+			}
+			#spinner {
+				width: 70px;
+				height: 70px;
+				animation-name: spin;
+				animation-duration: 2000ms;
+				animation-iteration-count: infinite;
+				animation-timing-function: linear;
+				transition: opacity 1s ease;
+				opacity: 1;
+			}
+			#spinner svg {
+				fill: white;
+			}
 			.page {
 				width: calc(100vw - var(--scrollbarWidth));
 				height: calc(100vh - 20px);
@@ -354,6 +390,12 @@
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
 	</head>
 	<body>
+		<div id="overlay">
+			<div id="spinner">
+				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!-- Font Awesome Pro 5.15.4 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) --><path d="M304 48c0 26.51-21.49 48-48 48s-48-21.49-48-48 21.49-48 48-48 48 21.49 48 48zm-48 368c-26.51 0-48 21.49-48 48s21.49 48 48 48 48-21.49 48-48-21.49-48-48-48zm208-208c-26.51 0-48 21.49-48 48s21.49 48 48 48 48-21.49 48-48-21.49-48-48-48zM96 256c0-26.51-21.49-48-48-48S0 229.49 0 256s21.49 48 48 48 48-21.49 48-48zm12.922 99.078c-26.51 0-48 21.49-48 48s21.49 48 48 48 48-21.49 48-48c0-26.509-21.491-48-48-48zm294.156 0c-26.51 0-48 21.49-48 48s21.49 48 48 48 48-21.49 48-48c0-26.509-21.49-48-48-48zM108.922 60.922c-26.51 0-48 21.49-48 48s21.49 48 48 48 48-21.49 48-48-21.491-48-48-48z"/></svg>
+			</div>
+		</div>
+
 		<div class="page">
 			<div class="page-content landing">
 				<div class="title pop-in text-box" id="landing-title"></div>
@@ -466,27 +508,31 @@
 			}
 			const nameParam = getNameParam();
 			let data = {};
-			$.get(`${baseUrl}/guests/${nameParam}`, (_data) => {
-				data = _data;
-				$("#landing-title").text(`${data.title}!`);
-				revealElement("#landing-title", 100);
-				revealElement("#landing-subtitle-1", 2000);
-				revealElement("#landing-subtitle-2", 5000);
-				revealElement("#arrow-1", 7000);
-				data.guests.forEach((guest, i) => {
-					$("#guests").append(
-						$(``
-							+ `<div class="guest" id="guest-${i}">`
-							+ `  <div class="guest-name">${guest.name}</div>`
-							+ `  <form style="overflow: hidden;">`
-							+ `    <input type="radio" name="attending" class="toggle toggle-left" id="guest-${i}-attending" value="true" ${guest.attending ? 'checked' : ''}>`
-							+ `    <label class="btn" for="guest-${i}-attending">Tuleb</label>`
-							+ `    <input type="radio" name="attending" class="toggle toggle-right" id="guest-${i}-not-attending" value="false" ${guest.attending ? '' : 'checked'}>`
-							+ `    <label class="btn" for="guest-${i}-not-attending">Ei tule</label>`
-							+ `  </form>`
-							+ `</div>`
-						)
-					);
+			$(window).on("load", () => {
+				$.get(`${baseUrl}/guests/${nameParam}`, (_data) => {
+					data = _data;
+					$("#landing-title").text(`${data.title}!`);
+					hideElement("#spinner", 500)
+					hideElement("#overlay", 2000)
+					revealElement("#landing-title", 3500);
+					revealElement("#landing-subtitle-1", 5500);
+					revealElement("#landing-subtitle-2", 8500);
+					revealElement("#arrow-1", 10500);
+					data.guests.forEach((guest, i) => {
+						$("#guests").append(
+							$(``
+								+ `<div class="guest" id="guest-${i}">`
+								+ `  <div class="guest-name">${guest.name}</div>`
+								+ `  <form style="overflow: hidden;">`
+								+ `    <input type="radio" name="attending" class="toggle toggle-left" id="guest-${i}-attending" value="true" ${guest.attending ? 'checked' : ''}>`
+								+ `    <label class="btn" for="guest-${i}-attending">Tuleb</label>`
+								+ `    <input type="radio" name="attending" class="toggle toggle-right" id="guest-${i}-not-attending" value="false" ${guest.attending ? '' : 'checked'}>`
+								+ `    <label class="btn" for="guest-${i}-not-attending">Ei tule</label>`
+								+ `  </form>`
+								+ `</div>`
+							)
+						);
+					});
 				});
 			});
 			function register_attendees() {
