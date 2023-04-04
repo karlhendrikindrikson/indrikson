@@ -52,6 +52,7 @@
 				z-index: 11;
 			}
 			#code-form {
+				display: none;
 				position: fixed;
 				left: 50%;
 				top: 50%;
@@ -621,35 +622,38 @@
 			let data = {};
 			function initialize() {
 				$("#landing-title").text(`${data.title}!`);
-					hideElement("#spinner", 500);
-					hideElement("#overlay", 2000);
-					setTimeout(() => {
-						$("#overlay").remove()
-					}, 4000);
-					revealElement("#landing-title", 3500);
-					revealElement("#landing-subtitle-1", 5500);
-					revealElement("#landing-subtitle-2", 8500);
-					revealElement("#arrow-1", 10500);
-					data.guests.forEach((guest, i) => {
-						$("#guests").append(
-							$(``
-								+ `<div class="guest" id="guest-${i}">`
-								+ `  <div class="guest-name">${guest.name}</div>`
-								+ `  <form style="overflow: hidden;">`
-								+ `    <input type="radio" name="attending" class="toggle toggle-left" id="guest-${i}-attending" value="true" ${guest.attending ? 'checked' : ''}>`
-								+ `    <label class="btn" for="guest-${i}-attending">Tuleb</label>`
-								+ `    <input type="radio" name="attending" class="toggle toggle-right" id="guest-${i}-not-attending" value="false" ${guest.attending ? '' : 'checked'}>`
-								+ `    <label class="btn" for="guest-${i}-not-attending">Ei tule</label>`
-								+ `  </form>`
-								+ `</div>`
-							)
-						);
-					});
+				hideElement("#spinner", 500);
+				hideElement("#overlay", 2000);
+				setTimeout(() => {
+					$("#overlay").remove();
+					$("#spinner").remove();
+					$("#code-form").remove();
+				}, 4000);
+				revealElement("#landing-title", 3500);
+				revealElement("#landing-subtitle-1", 5500);
+				revealElement("#landing-subtitle-2", 8500);
+				revealElement("#arrow-1", 10500);
+				data.guests.forEach((guest, i) => {
+					$("#guests").append(
+						$(``
+							+ `<div class="guest" id="guest-${i}">`
+							+ `  <div class="guest-name">${guest.name}</div>`
+							+ `  <form style="overflow: hidden;">`
+							+ `    <input type="radio" name="attending" class="toggle toggle-left" id="guest-${i}-attending" value="true" ${guest.attending ? 'checked' : ''}>`
+							+ `    <label class="btn" for="guest-${i}-attending">Tuleb</label>`
+							+ `    <input type="radio" name="attending" class="toggle toggle-right" id="guest-${i}-not-attending" value="false" ${guest.attending ? '' : 'checked'}>`
+							+ `    <label class="btn" for="guest-${i}-not-attending">Ei tule</label>`
+							+ `  </form>`
+							+ `</div>`
+						)
+					);
+				});
 			}
 			const nameParam = getNameParam();
 			$(window).on("load", () => {
 				if (nameParam.trim() === '' || nameParam.endsWith('indrikson.ee')) {
 					hideElement("#spinner", 500);
+					$("#code-form").css('display', 'block');
 					revealElement("#code-form", 1000);
 				} else {
 					$.ajax({
