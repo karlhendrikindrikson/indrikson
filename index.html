@@ -522,7 +522,7 @@
 
 				<div id="registration-form" class="text-box">
 					<div id="guests"></div>
-					<button type="button" onclick="register_attendees()" id="register-button">
+					<button type="button" onclick="registerAttendees()" id="register-button">
 						<svg width="20" height="20" class="send-icon">
 							<image xlink:href="send.svg" width="20" height="20"/>
 						</svg>
@@ -557,7 +557,7 @@
 					sisesta palun oma e-posti aadress.
 					<div id="email-input-form">
 						<div>
-							<input placeholder="Sisesta e-posti aadress" id="email-input"/><button type="button" id="register-email-button" onclick="register_email()">
+							<input placeholder="Sisesta e-posti aadress" id="email-input"/><button type="button" id="register-email-button" onclick="registerEmail()">
 								<svg width="18" height="18" class="send-icon">
 									<image xlink:href="send.svg" width="18" height="18"/>
 								</svg>
@@ -649,6 +649,9 @@
 						)
 					);
 				});
+				if (data.email != null) {
+					$("#email-input").val(data.email);
+				}
 			}
 			const nameParam = getNameParam();
 			$(window).on("load", () => {
@@ -671,7 +674,7 @@
 				});
 				}
 			});
-			function register_attendees() {
+			function registerAttendees() {
 				$("#register-button").prop('disabled', true);
 				const body = {
 					attendees: data.guests.map((attendee, i) => ({
@@ -698,7 +701,7 @@
 					}
 				});
 			}
-			function register_email() {
+			function registerEmail() {
 				$("#register-email-button").prop('disabled', true);
 				const body = {
 					email: $("#email-input").val()
