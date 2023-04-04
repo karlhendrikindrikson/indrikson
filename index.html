@@ -601,7 +601,7 @@
 				});
 			}
 			function setCode() {
-				const code = $("#code-input").text();
+				const code = $("#code-input").val();
 				window.location.href = `${window.location.href}/${code}`;
 			}
 			function getNameParam() {
@@ -696,7 +696,7 @@
 			function register_email() {
 				$("#register-email-button").prop('disabled', true);
 				const body = {
-					email: $("#email-input").text()
+					email: $("#email-input").val()
 				}
 				$.ajax({
 					url: `${baseUrl}/email/${nameParam}`,
